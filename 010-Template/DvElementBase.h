@@ -77,14 +77,14 @@ typedef struct
 {
     SetRandomBackColor();
     GUID guid;
-    uint32 field_40;            // is type related ???
+    uint32 field_10;            // is type related ???
     DvElementType type;                    
     uint32 childElementsCount;
-    uint32 field_4c;
-    uint32 field_50;
-    uint32 field_54;
-    uint32 field_58;
-    uint32 field_5c;
+    uint32 field_1c;
+    uint32 field_20;
+    uint32 field_24;
+    uint32 field_28;
+    uint32 field_2c;
     switch (type)
     {
 		case 4:     DvElementCamera                     dvCamera;               break;
