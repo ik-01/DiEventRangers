@@ -21,12 +21,14 @@
 #include "DvElements/DvElementNearFarSettings.h"
 #include "DvElements/DvElementPathAdjustment.h"
 #include "DvElements/DvElementPathInterpolation.h"
+#include "DvElements/DvElementQTE.h"
 #include "DvElements/DvElementRootPath.h"
 #include "DvElements/DvElementShadowResolution.h"
 #include "DvElements/DvElementSound.h"
 #include "DvElements/DvElementSpotlightModel.h"
 #include "DvElements/DvElementSun.h"
 #include "DvElements/DvElementTime.h"
+#include "DvElements/DvElementUnknownCamera.h"
 #include "DvElements/DvElementUVAnimation.h"
 #include "DvElements/DvElementVariablePointLight.h"
 #include "DvElements/DvElementVignette.h"
@@ -63,6 +65,7 @@ enum <uint32> DvElementType
 	DvElementTypeUnknownCamera = 88,
 	DvElementTypeVignette = 90,
 	DvElementTypeSpotlightModel = 95,
+	DvElementTypeQTE = 104,
 	DvElementTypePathInterpolation = 156,
 	DvElementTypeVariablePointLight = 168,
 	DvElementTypeEffect = 177,
@@ -70,6 +73,15 @@ enum <uint32> DvElementType
 	DvElementTypeComplexAnimation = 285,
 };
 
+enum <uint32> DvElementUnknownType
+{
+	Type1 = 1,         
+	Type2 = 3, 
+	Type3, 
+	Type4,
+	Type5,	
+	Type6 = 12, 
+};
 
 struct DvElementBase;
 
@@ -77,7 +89,7 @@ typedef struct
 {
     SetRandomBackColor();
     GUID guid;
-    uint32 field_10;            // is type related ???
+    DvElementUnknownType field_10;            // is type related ???
     DvElementType type;                    
     uint32 childElementsCount;
     uint32 field_1c;
@@ -112,9 +124,10 @@ typedef struct
 		case 68:    DvElementModel                      dvModel;                break;
 		case 80:    DvElementCameraShakeLoop            dvCameraShakeLoop;      break;
 		case 83:    DvElementAtmosphereHeightFogParam   dvCameraHeightFog;      break;
-		// case 88:    DvElementUnknownCamera              dvUnknownCamera;        break;
+		case 88:    DvElementUnknownCamera              dvUnknownCamera;        break;
 		case 90:    DvElementVignette                   dvCameraVignette;       break;
 		case 95:    DvElementSpotlightModel             dvSpotlightModel;       break;
+		case 104:   DvElementQTE			            dvQTE;    			    break;
 		case 156:   DvElementPathInterpolation          dvPathInterpolation;    break;
 		case 168:   DvElementVariablePointLight         dvPointLight;           break;
 		case 177:   DvElementEffect                     dvEffect;               break;
