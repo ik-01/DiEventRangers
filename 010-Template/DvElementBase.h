@@ -80,7 +80,8 @@ enum <uint32> DvElementUnknownType
 	Type3, 
 	Type4,
 	Type5,	
-	Type6 = 12, 
+	Type6 = 11,
+	Type7,
 };
 
 struct DvElementBase;
