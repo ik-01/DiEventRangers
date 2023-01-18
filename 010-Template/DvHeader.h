@@ -16,12 +16,12 @@ typedef struct
 	SetRandomBackColor();
 	uint32 field_00;
 	uint32 field_04;
-	uint32 field_08;
-	uint32 field_0c;
-	uint32 field_0c;
+	uint32 frameStart <read=Str("%d",this / 100), write=(this = Atoi( value ) * 100 )>;
+	uint32 frameEnd  <read=Str("%d",this / 100), write=(this = Atoi( value ) * 100 )>;
+	uint32 field_10;
 	uint32 size;
-	uint32 field_18;
-	uint32 field_1c;
+	uint32 isTotalFrameCount <read=Str("%d",this/100), write=(this = Atoi( value ) * 100 )>; // Needs to figure out
+	uint32 index;
 	uint32 field_20;
 	uint32 field_24;
 	uint32 field_28;
@@ -34,7 +34,8 @@ typedef struct
 		int32 field_58;
 		int32 field_5c;
 	}
-	char field_60[size];
+	// Need to figure this struct
+	int32 field_60[size/4];
 	
 } QTE <optimize=false,name="QTE", read=Str("%s",name), comment="Note: Name string using UTF-8. You need to change text encoding in 'View'">;
 
