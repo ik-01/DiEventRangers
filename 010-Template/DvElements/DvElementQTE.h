@@ -41,7 +41,7 @@ typedef struct
 	QTEType field_60;
 	QTEButton field_64;
 	float field_68[7];	//	Contains QTE params like ring thickness, speed, etc.
-	uint32 field_84;
+	uint32 failCount;
 	uint32 field_88;
 	char field_8c[0x44];
 	float field_d0;
