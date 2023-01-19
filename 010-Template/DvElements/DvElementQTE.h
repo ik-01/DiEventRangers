@@ -43,7 +43,8 @@ typedef struct
 	float field_68[7];	//	Contains QTE params like ring thickness, speed, etc.
 	uint32 failCount;
 	uint32 field_88;
-	char field_8c[0x44];
+	char field_8c[0x40];
+	float field_cc;
 	float field_d0;
 	float field_d4;
 	char field_d8[0x108];
