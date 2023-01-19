@@ -46,6 +46,6 @@ typedef struct
 	char field_8c[0x44];
 	float field_d0;
 	float field_d4;
-	char field_d8[0x108]
+	char field_d8[0x108];
     
 }DvElementQTE<optimize=false, read=Str("%s", elementName.str), name="DvElementQTE">;
