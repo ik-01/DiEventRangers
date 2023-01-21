@@ -130,8 +130,8 @@ typedef struct
 		case 88:    DvElementUnknownCamera              dvUnknownCamera;        break;
 		case 90:    DvElementVignette                   dvCameraVignette;       break;
 		case 95:    DvElementSpotlightModel             dvSpotlightModel;       break;
-		case 104:   DvElementQTE			            dvQTE;    			    break;
-		case 144:   DvElementModelFade			        dvModelFade;    		break;
+		case 104:   DvElementQTE						dvQTE;					break;
+		case 144:   DvElementModelFade					dvModelFade;			break;
 		case 156:   DvElementPathInterpolation          dvPathInterpolation;    break;
 		case 168:   DvElementVariablePointLight         dvPointLight;           break;
 		case 177:   DvElementEffect                     dvEffect;               break;
