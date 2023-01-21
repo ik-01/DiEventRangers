@@ -118,7 +118,7 @@ typedef struct
 		case 40:    DvElementLetterBox                  dvLetterBox;            break;
 		case 41:    DvElementCyberSpaceNoise            dvCyberSpaceNoise;      break;
 		case 44:    DvElementFade                       dvFade;                 break;
-		case 47:    DvElementSun                        dvSun;      			break;
+		case 47:    DvElementSun                        dvSun;                  break;
 		case 48:    DvElementCameraExposure             dvCameraExposure;       break;
 		case 49:    DvElementTime                       dvTime;                 break;
 		case 57:    DvElementChromaticAberration        dvChromaticAberration;  break;
