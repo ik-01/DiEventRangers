@@ -16,6 +16,7 @@
 #include "DvElements/DvElementLetterBox.h"
 #include "DvElements/DvElementModel.h"
 #include "DvElements/DvElementModelClipping.h"
+#include "DvElements/DvElementModelFade.h"
 #include "DvElements/DvElementMotion.h"
 #include "DvElements/DvElementMovieView.h"
 #include "DvElements/DvElementNearFarSettings.h"
@@ -66,6 +67,7 @@ enum <uint32> DvElementType
 	DvElementTypeVignette = 90,
 	DvElementTypeSpotlightModel = 95,
 	DvElementTypeQTE = 104,
+	DvElementTypeModelFade = 144,
 	DvElementTypePathInterpolation = 156,
 	DvElementTypeVariablePointLight = 168,
 	DvElementTypeEffect = 177,
@@ -129,6 +131,7 @@ typedef struct
 		case 90:    DvElementVignette                   dvCameraVignette;       break;
 		case 95:    DvElementSpotlightModel             dvSpotlightModel;       break;
 		case 104:   DvElementQTE			            dvQTE;    			    break;
+		case 144:   DvElementModelFade			        dvModelFade;    		break;
 		case 156:   DvElementPathInterpolation          dvPathInterpolation;    break;
 		case 168:   DvElementVariablePointLight         dvPointLight;           break;
 		case 177:   DvElementEffect                     dvEffect;               break;
