@@ -1,6 +1,8 @@
 #include "DvElements/DvElementAtmosphereHeightFogParam.h"
 #include "DvElements/DvElementAura.h"
+#include "DvElements/DvElementBloomParam.h"
 #include "DvElements/DvElementCamera.h"
+#include "DvElements/DvElementCameraControlParam.h"
 #include "DvElements/DvElementCameraExposure.h"
 #include "DvElements/DvElementCameraOffset.h"
 #include "DvElements/DvElementCameraShakeLoop.h"
@@ -14,6 +16,7 @@
 #include "DvElements/DvElementGameCamera.h"
 #include "DvElements/DvElementGeneralTrigger.h"
 #include "DvElements/DvElementLetterBox.h"
+#include "DvElements/DvElementLookAtIK.h"
 #include "DvElements/DvElementModel.h"
 #include "DvElements/DvElementModelClipping.h"
 #include "DvElements/DvElementModelFade.h"
@@ -57,6 +60,7 @@ enum <uint32> DvElementType
 	DvElementTypeSun = 47,
 	DvElementTypeCameraExposure = 48,
 	DvElementTypeTime = 49,
+	DvElementTypeBloomParam = 51,
 	DvElementTypeChromaticAberration = 57,
 	DvElementTypeAura = 59,
 	DvElementTypeDOF = 60,
@@ -64,6 +68,7 @@ enum <uint32> DvElementType
 	DvElementTypeCameraShakeLoop = 80,
 	DvElementTypeAtmosphereHeightFogParam = 83,
 	DvElementTypeUnknownCamera = 88,
+	DvElementTypeLookAtIK = 89,
 	DvElementTypeVignette = 90,
 	DvElementTypeSpotlightModel = 95,
 	DvElementTypeQTE = 104,
@@ -73,6 +78,7 @@ enum <uint32> DvElementType
 	DvElementTypeEffect = 177,
 	DvElementTypeCameraOffset = 276 ,
 	DvElementTypeComplexAnimation = 285,
+	DvElementTypeControlParam = 290,
 };
 
 enum <uint32> DvElementUnknownType
@@ -121,6 +127,7 @@ typedef struct
 		case 47:    DvElementSun                        dvSun;                  break;
 		case 48:    DvElementCameraExposure             dvCameraExposure;       break;
 		case 49:    DvElementTime                       dvTime;                 break;
+		case 51:    DvElementBloomParam                 dvBloom;                break;
 		case 57:    DvElementChromaticAberration        dvChromaticAberration;  break;
 		case 59:    DvElementAura                       dvAura;                 break;
 		case 60:    DvElementDOF                        dvDOF;                  break;
@@ -128,6 +135,7 @@ typedef struct
 		case 80:    DvElementCameraShakeLoop            dvCameraShakeLoop;      break;
 		case 83:    DvElementAtmosphereHeightFogParam   dvCameraHeightFog;      break;
 		case 88:    DvElementUnknownCamera              dvUnknownCamera;        break;
+		case 89:    DvElementLookAtIK                   dvLookAtIK;             break;
 		case 90:    DvElementVignette                   dvCameraVignette;       break;
 		case 95:    DvElementSpotlightModel             dvSpotlightModel;       break;
 		case 104:   DvElementQTE                        dvQTE;                  break;
@@ -137,6 +145,7 @@ typedef struct
 		case 177:   DvElementEffect                     dvEffect;               break;
 		case 276:   DvElementCameraOffset               dvCameraOffset;         break;
 		case 285:   DvElementComplexAnimation           dvComplexAnimation;     break;
+		case 290:   DvElementCameraControlParam         dvCameraControlParam;   break;
 		default: Warning("Not implemented DvElement detected!"); break;
 	}
 	if (childElementsCount) DvElementBase childElements[childElementsCount];
