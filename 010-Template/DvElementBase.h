@@ -85,15 +85,15 @@ enum <uint32> DvElementType
 
 enum <uint32> DvElementUnknownType
 {
-	Type1 = 1,         
-	Type2 = 3, 
-	Type3, 
-	Type4,
-	Type5,
-	Type6 = 8,	
-	Type7 = 10,	
-	Type8,
-	Type9,
+	Root = 1,         
+	Camera = 3, 
+	CameraMotion, 
+	Model1,
+	Motion1,
+	Model2 = 8,	
+	Motion2 = 10,	
+	Type8,			// Using for particles
+	Type9,			// Everything else
 };
 
 struct DvElementBase;
@@ -113,7 +113,7 @@ typedef struct
 	dvString elementName;
 	switch (field_10)
     {
-		case Type1:
+		case Root:
 		{
 			Matrix44 mtx;
 			uint32 field_80;
@@ -122,8 +122,8 @@ typedef struct
 			uint32 field_8c;
 			break;
 		}
-		case Type2:	
-		case Type3:
+		case Camera:	
+		case CameraMotion:
 		{
 			uint32 field_80;
 			uint32 field_84;
@@ -131,8 +131,8 @@ typedef struct
 			uint32 field_8c;
 			break;
 		}
-		case Type4: uint32 field_40;   break;
-		case Type5:
+		case Model1: uint32 field_40;   break;
+		case Motion1:
 		{
 			uint32 field_40[4];
 			// Mostly is Dst0000 (DiEventState 0000)
@@ -141,8 +141,8 @@ typedef struct
 			uint32 field_54;
 			break;
 		}
-		case Type6: uint32 field_40;   break;
-		case Type7:
+		case Model2: uint32 field_40;   break;
+		case Motion2:
 		{
 			uint32 field_40[4];
 			// Mostly is Dst0000 (DiEventState 0000)
@@ -178,7 +178,7 @@ typedef struct
     {
 		case 4:     DvElementCamera                     dvCamera;               break;
 		case 8:     DvElementMovieView                  dvMovieView;            break;
-		case 10:    DvElementShadowResolution           dvShadowResolution ;    break;
+		case 10:    DvElementShadowResolution           dvShadowResolution;     break;
 		case 12:    DvElementMotion                     dvMotion;               break;
 		case 13:    DvElementModelClipping              dvModelClipping;        break;
 		case 14:    DvElementCaption                    dvCaption;              break;
