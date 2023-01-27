@@ -1,9 +1,5 @@
 typedef struct
 {
-    dvString elementName;
-    uint32 field_40;
-    float frameStart;
-    float frameEnd;
-    char data[0x154];
+    char data[0x140];
     
-}DvElementUnknownCamera<optimize=false, read=Str("%s", elementName.str), name="DvElementUnknownCamera">;
+}DvElementUnknownCamera<optimize=false, name="DvElementUnknownCamera">;
