@@ -1,6 +1,5 @@
 typedef struct
 {
-    dvString elementName;
-    char data[0xC4];
+    char data[0xA4];
     
-}DvElementTime<optimize=false, read=Str("%s", elementName.str), name="DvElementTime">;
+}DvElementTime<optimize=false, name="DvElementTime">;

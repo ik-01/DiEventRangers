@@ -1,6 +1,5 @@
 typedef struct
 {
-    dvString elementName;
-    char data[0x34];
+    char data[0x14];
     
-}DvElementModelClipping<optimize=false, read=Str("%s", elementName.str), name="DvElementModelClipping">;
+}DvElementModelClipping<optimize=false, name="DvElementModelClipping">;

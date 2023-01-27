@@ -1,6 +1,5 @@
 typedef struct
 {
-    dvString elementName;
-    char data[0x17C];
+    char data[0x15C];
     
-}DvElementSpotlightModel<optimize=false, read=Str("%s", elementName.str), name="DvElementSpotlightModel">;
+}DvElementSpotlightModel<optimize=false,  name="DvElementSpotlightModel">;

@@ -1,6 +1,5 @@
 typedef struct
 {
-    dvString elementName;
-    char data[0x14C];
+    char data[0x12C];
     
-}DvElementAtmosphereHeightFogParam<optimize=false, read=Str("%s", elementName.str), name="DvElementAtmosphereHeightFogParam">;
+}DvElementAtmosphereHeightFogParam<optimize=false, name="DvElementAtmosphereHeightFogParam">;

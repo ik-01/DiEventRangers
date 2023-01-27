@@ -1,6 +1,6 @@
 typedef struct
 {
-    dvString elementName;
-    char data[0x450];
+    char data[0x30];
+	float data1[0x100];
     
-}DvElementCameraOffset<optimize=false, read=Str("%s", elementName.str), name="DvElementCameraOffset">;
+}DvElementCameraOffset<optimize=false, name="DvElementCameraOffset">;

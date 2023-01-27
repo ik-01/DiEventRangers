@@ -1,5 +1,6 @@
 #include "DvElements/DvElementAtmosphereHeightFogParam.h"
 #include "DvElements/DvElementAura.h"
+#include "DvElements/DvElementAuraRoad.h"
 #include "DvElements/DvElementBloomParam.h"
 #include "DvElements/DvElementCamera.h"
 #include "DvElements/DvElementCameraControlParam.h"
@@ -65,6 +66,7 @@ enum <uint32> DvElementType
 	DvElementTypeAura = 59,
 	DvElementTypeDOF = 60,
 	DvElementTypeModel = 68,
+	DvElementTypeAuraRoad = 73,
 	DvElementTypeCameraShakeLoop = 80,
 	DvElementTypeAtmosphereHeightFogParam = 83,
 	DvElementTypeUnknownCamera = 88,
@@ -87,9 +89,11 @@ enum <uint32> DvElementUnknownType
 	Type2 = 3, 
 	Type3, 
 	Type4,
-	Type5,	
-	Type6 = 11,
-	Type7,
+	Type5,
+	Type6 = 8,	
+	Type7 = 10,	
+	Type8,
+	Type9,
 };
 
 struct DvElementBase;
@@ -106,6 +110,70 @@ typedef struct
     uint32 field_24;
     uint32 field_28;
     uint32 field_2c;
+	dvString elementName;
+	switch (field_10)
+    {
+		case Type1:
+		{
+			Matrix44 mtx;
+			uint32 field_80;
+			uint32 field_84;
+			uint32 field_88;
+			uint32 field_8c;
+			break;
+		}
+		case Type2:	
+		case Type3:
+		{
+			uint32 field_80;
+			uint32 field_84;
+			uint32 field_88;
+			uint32 field_8c;
+			break;
+		}
+		case Type4: uint32 field_40;   break;
+		case Type5:
+		{
+			uint32 field_40[4];
+			// Mostly is Dst0000 (DiEventState 0000)
+			char asmStateName[8];
+			float field_50;
+			uint32 field_54;
+			break;
+		}
+		case Type6: uint32 field_40;   break;
+		case Type7:
+		{
+			uint32 field_40[4];
+			// Mostly is Dst0000 (DiEventState 0000)
+			char asmStateName[8];
+			float field_50;
+			uint32 field_54;
+			break;
+		}
+		case Type8:
+		{
+			uint32 field_40;
+			dvString boneName;
+			uint32 field_4c;
+			uint32 field_50;
+			uint32 field_54;
+			break;
+		}
+		case Type9:
+		{
+			uint32 field_40;
+			float frameStart;
+			float frameEnd;
+			uint32 field_4c;
+			uint32 field_50;
+			uint32 field_54;
+			uint32 field_58;
+			uint32 field_5c;
+			break;
+		}
+		default: Warning("Not implemented DvElement detected!"); break;
+	}
     switch (type)
     {
 		case 4:     DvElementCamera                     dvCamera;               break;
@@ -132,6 +200,7 @@ typedef struct
 		case 59:    DvElementAura                       dvAura;                 break;
 		case 60:    DvElementDOF                        dvDOF;                  break;
 		case 68:    DvElementModel                      dvModel;                break;
+		case 73:    DvElementAuraRoad                   dvAuraRoad;             break;
 		case 80:    DvElementCameraShakeLoop            dvCameraShakeLoop;      break;
 		case 83:    DvElementAtmosphereHeightFogParam   dvCameraHeightFog;      break;
 		case 88:    DvElementUnknownCamera              dvUnknownCamera;        break;

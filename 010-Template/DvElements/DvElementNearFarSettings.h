@@ -1,9 +1,9 @@
 typedef struct
 {
-    dvString elementName;
-    uint32 field_40;
-    float frameStart;
-    float frameEnd;
-    char field_4c[0x34];
+    uint32 field_00;
+	uint32 field_04;
+	float field_08;
+	float field_0c;
+	uint32 field_10[4];
     
-}DvElementNearFarSettings<optimize=false, read=Str("%s", elementName.str), name="DvElementNearFarSettings">;
+}DvElementNearFarSettings<optimize=false, name="DvElementNearFarSettings">;

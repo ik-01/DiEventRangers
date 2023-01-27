@@ -29,15 +29,6 @@ enum <uint32> QTEButton
 
 typedef struct
 {
-	dvString elementName;
-	uint32 field_40;
-	float frameStart;
-	float frameEnd;
-	uint32 field_4c;
-	uint32 field_50;
-	uint32 field_54;
-	uint32 field_58;
-	uint32 field_5c;
 	QTEType field_60;
 	QTEButton field_64;
 	float redCircleSize;
@@ -55,4 +46,4 @@ typedef struct
 	float field_d4;
 	char field_d8[0x108];
     
-}DvElementQTE<optimize=false, read=Str("%s", elementName.str), name="DvElementQTE">;
+}DvElementQTE<optimize=false, name="DvElementQTE">;

@@ -1,7 +1,5 @@
 typedef struct
 {
-    dvString elementName;
-    uint32 field_40;
-    char data[0x29C];
+    char data[0x280];
     
-}DvElementVariablePointLight<optimize=false, read=Str("%s", elementName.str), name="DvElementVariablePointLight">;
+}DvElementVariablePointLight<optimize=false, name="DvElementVariablePointLight">;
