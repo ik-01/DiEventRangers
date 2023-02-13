@@ -1,6 +1,7 @@
 typedef struct
 {
-	char field_48[0x20];
+	int unk1;
+	float field_48[7];
 	float field_80[32];
-    
+
 }DvElementCameraExposure<optimize=false, name="DvElementCameraExposure">;
