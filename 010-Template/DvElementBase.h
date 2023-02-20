@@ -12,12 +12,14 @@
 #include "DvElements/DvElementChromaticAberration.h"
 #include "DvElements/DvElementCyberSpaceNoise.h"
 #include "DvElements/DvElementDOF.h"
+#include "DvElements/DvElementDitherParam.h"
 #include "DvElements/DvElementEffect.h"
 #include "DvElements/DvElementFade.h"
 #include "DvElements/DvElementGameCamera.h"
 #include "DvElements/DvElementGeneralTrigger.h"
 #include "DvElements/DvElementLetterBox.h"
 #include "DvElements/DvElementLookAtIK.h"
+#include "DvElements/DvElementMaterialAnimation.h"
 #include "DvElements/DvElementModel.h"
 #include "DvElements/DvElementModelClipping.h"
 #include "DvElements/DvElementModelFade.h"
@@ -37,63 +39,75 @@
 #include "DvElements/DvElementUVAnimation.h"
 #include "DvElements/DvElementVariablePointLight.h"
 #include "DvElements/DvElementVignette.h"
+#include "DvElements/DvElementVisibilityAnimation.h"
+#include "DvElements/DvElementWeather.h"
 
 
 // Made it by guessing
-enum <uint32> DvElementType
+enum <uint32> DvElementID
 {
-	DvElementTypeCamera = 4,         
-	DvElementTypeMovieView = 8,
-	DvElementTypeShadowResolution = 10 ,
-	DvElementTypeMotion = 12,
-	DvElementTypeModelClipping = 13,
-	DvElementTypeCaption = 14,
-	DvElementTypeNearFarSettings = 16,
-	DvElementTypeRootPath = 20,
-	DvElementTypeGeneralTrigger = 25,
-	DvElementTypeSound = 26,
-	DvElementTypePathAdjustment = 28,
-	DvElementTypeUVAnimation = 29,
-	DvElementTypeGameCamera = 34,
-	DvElementTypeLetterBox = 40,
-	DvElementTypeCyberSpaceNoise = 41,
-	DvElementTypeFade = 44,
-	DvElementTypeSun = 47,
-	DvElementTypeCameraExposure = 48,
-	DvElementTypeTime = 49,
-	DvElementTypeBloomParam = 51,
-	DvElementTypeChromaticAberration = 57,
-	DvElementTypeAura = 59,
-	DvElementTypeDOF = 60,
-	DvElementTypeModel = 68,
-	DvElementTypeAuraRoad = 73,
-	DvElementTypeCameraShakeLoop = 80,
-	DvElementTypeAtmosphereHeightFogParam = 83,
-	DvElementTypeUnknownCamera = 88,
-	DvElementTypeLookAtIK = 89,
-	DvElementTypeVignette = 90,
-	DvElementTypeSpotlightModel = 95,
-	DvElementTypeQTE = 104,
-	DvElementTypeModelFade = 144,
-	DvElementTypePathInterpolation = 156,
-	DvElementTypeVariablePointLight = 168,
-	DvElementTypeEffect = 177,
-	DvElementTypeCameraOffset = 276 ,
-	DvElementTypeComplexAnimation = 285,
-	DvElementTypeControlParam = 290,
+	//DvElementTypeCamera = 4,         
+	//DvElementTypeAtmosphereHeightFogParam = 83,
+	//DvElementTypeAuraRoad = 73,
+	//DvElementTypeBloomParam = 51,
+	//DvElementTypeControlParam = 290,
+	//DvElementTypeLookAtIK = 89,
+	//DvElementTypeModelFade = 144,
+	//DvElementTypePathInterpolation = 156,
+	//DvElementTypeRootPath = 20,
+	DvElementTypeSun = 1018,
+	//DvElementTypeUnknownCamera = 88,
+	Aura = 1027,
+	CameraExposure = 1003,
+	CameraOffset = 17,
+	CameraShakeLoop = 7,
+	Caption = 1015,
+	ChromaticAberration = 1008,
+	DvElementTypeComplexAnimation = 16,
+	Culling = 11,
+	CyberSpaceNoise = 1029,
+	DOF = 1001,
+	DitherParam = 1023,
+	Effect = 8,
+	Fade = 1010,
+	GameCamera = 21,
+	GeneralTrigger = 1021,
+	LetterBox = 1011,
+	DvElementTypeMaterialAnimation = 15,
+	Model = 1,
+	ModelClipping = 1012,
+	Motion = 1028,
+	MovieView = 1032,
+	NearFarSettings = 6,
+	OpeningLogo = 1037,
+	PathAdjustment = 5,
+	QTE = 1024,
+	ShadowResolution = 1004,
+	Sound = 1016,
+	SpotlightModel = 26,
+	Time = 1017,
+	DvElementTypeUVAnimation = 13,
+	VariablePointLight = 1036,
+	Vignette = 1009,
+	Weather = 1034,
+	DvElementUnknown1 = 3,
 };
 
-enum <uint32> DvElementUnknownType
+enum <uint32> DvElementCategory
 {
-	Root = 1,         
-	Camera = 3, 
-	CameraMotion, 
-	Model1,
-	Motion1,
-	Model2 = 8,	
-	Motion2 = 10,	
-	Type8,			// Using for particles
-	Type9,			// Everything else
+	DummyNode = 0,
+	Path = 1,
+	PathMotion,
+	Camera,
+	CameraMotion,
+	Character,
+	CharacterMotion,
+	CharacterBehavior,
+	ModelCustom,
+	Asset,
+	MotionModel,
+	ModelNode,
+	Element,
 };
 
 struct DvElementBase;
@@ -102,18 +116,18 @@ typedef struct
 {
     SetRandomBackColor();
     GUID guid;
-    DvElementUnknownType field_10;            // is type related ???
-    DvElementType type;                    
+    DvElementCategory category;
+    uint32 nodeSize <read=Str("%d",this * 4), write=(this = Atoi( value ) / 4 )>; 
     uint32 childElementsCount;
-    uint32 field_1c;
-    uint32 field_20;
+    uint32 flags;
+    uint32 priority;
     uint32 field_24;
     uint32 field_28;
     uint32 field_2c;
 	dvString elementName;
-	switch (field_10)
+	switch (category)
     {
-		case Root:
+		case Path:
 		{
 			Matrix44 mtx;
 			uint32 field_80;
@@ -131,57 +145,106 @@ typedef struct
 			uint32 field_8c;
 			break;
 		}
-		case Model1: uint32 field_40;   break;
-		case Motion1:
-		{
-			uint32 field_40[4];
-			// Mostly is Dst0000 (DiEventState 0000)
-			char asmStateName[8];
-			float field_50;
-			uint32 field_54;
-			break;
-		}
-		case Model2: uint32 field_40;   break;
-		case Motion2:
-		{
-			uint32 field_40[4];
-			// Mostly is Dst0000 (DiEventState 0000)
-			char asmStateName[8];
-			float field_50;
-			uint32 field_54;
-			break;
-		}
-		case Type8:
-		{
+		case Character: 
+		{	
 			uint32 field_40;
+			DvElementModel	dvModel;
+			break;
+		}
+		case CharacterMotion:
+		{
+			uint32 field_40[4];
+			// Mostly is Dst0000 (DiEventState 0000)
+			char asmStateName[8];
+			float field_50;
+			uint32 field_54;
+			DvElementMotion dvMotion;
+			break;
+		}
+		case ModelCustom: 
+		{	
+			uint32 field_40;
+			DvElementModel	dvModel;
+			break;
+		}
+		case MotionModel:
+		{
+			uint32 field_40[4];
+			// Mostly is Dst0000 (DiEventState 0000)
+			char asmStateName[8];
+			float field_50;
+			uint32 field_54;
+			DvElementMotion dvMotion;
+			break;
+		}
+		case ModelNode:
+		{
+			DvElementID id;
 			dvString boneName;
 			uint32 field_4c;
 			uint32 field_50;
 			uint32 field_54;
+			switch (id)
+			{
+				case 8:   DvElementEffect	dvEffect;	break;
+			}
 			break;
 		}
-		case Type9:
+		case Element:
 		{
-			uint32 field_40;
+			DvElementID id;
 			float frameStart;
 			float frameEnd;
-			uint32 field_4c;
-			uint32 field_50;
-			uint32 field_54;
-			uint32 field_58;
+			uint32 version;
+			uint32 flag;
+			uint32 playType;
+			uint32 updateTiming;
 			uint32 field_5c;
+			switch (id)
+			{
+				case 3:		uint32							dvUnknown1[4];			break;
+				case 5:		DvElementPathAdjustment			dvPathAdjustment;       break;
+				case 7:		DvElementCameraShakeLoop		dvCameraShakeLoop;		break;
+				case 8:		DvElementEffect					dvEffect;				break;
+				case 13:	DvElementUVAnimation			dvUVAnimation;			break;
+				case 14:	DvElementVisibilityAnimation	dvUVAnimation;			break;
+				case 15:	DvElementMaterialAnimation		dvMaterialAnimation;	break;
+				case 16:	DvElementComplexAnimation		dvComplexAnimation;		break;
+				case 17:	DvElementCameraOffset			dvCameraOffset;			break;
+				case 21:	DvElementGameCamera				dvGameCamera;			break;
+				case 1001:	DvElementDOF					dvDOF;					break;
+				case 1003:	DvElementCameraExposure			dvCameraExposure;		break;
+				case 1004:	DvElementShadowResolution		dvShadowResolution;		break;
+				case 1008:	DvElementChromaticAberration	dvChromaticAberration;	break;
+				case 1009:	DvElementVignette				dvVignette;				break;
+				case 1010:	DvElementFade					dvFade;					break;
+				case 1011:	DvElementLetterBox				dvLetterBox;			break;
+				case 1015:	DvElementCaption				dvCaption;				break;
+				case 1016:	DvElementSound					dvSound;				break;
+				case 1017:	DvElementTime					dvTime;					break;
+				case 1018:	DvElementSun					dvSun;					break;
+				case 1023:	DvElementDitherParam			dvDitherParam;			break;
+				case 1024:	DvElementQTE					dvQTE;					break;
+				case 1027:	DvElementAura					dvAura;					break;
+				case 1028:	DvElementMotion					dvMotion;				break;
+				case 1029:	DvElementCyberSpaceNoise		dvCyberSpaceNoise;		break;
+				case 1034:	DvElementWeather				dvWeather;				break;
+				case 1036:	DvElementVariablePointLight		dvPointLight;			break;
+				//case 1032:	DvElementMovieView		dvMovieView;	break;
+				//case 1037:	DvElementOpeningLogo	dvOpeningLogo;	break;
+			}
 			break;
 		}
-		default: Warning("Not implemented DvElement detected!"); break;
+		
 	}
-    switch (type)
+    /* switch (id)
     {
 		case 4:     DvElementCamera                     dvCamera;               break;
-		case 8:     DvElementMovieView                  dvMovieView;            break;
+
 		case 10:    DvElementShadowResolution           dvShadowResolution;     break;
 		case 12:    DvElementMotion                     dvMotion;               break;
 		case 13:    DvElementModelClipping              dvModelClipping;        break;
-		case 14:    DvElementCaption                    dvCaption;              break;
+
 		case 16:    DvElementNearFarSettings            dvNearFar;              break;
 		case 20:    DvElementRootPath                   dvRootPath;             break;
 		case 25:    DvElementGeneralTrigger             dvGeneralTrigger;       break;
@@ -191,7 +254,7 @@ typedef struct
 		case 34:    DvElementGameCamera                 dvGameCamera;           break;
 		case 40:    DvElementLetterBox                  dvLetterBox;            break;
 		case 41:    DvElementCyberSpaceNoise            dvCyberSpaceNoise;      break;
-		case 44:    DvElementFade                       dvFade;                 break;
+		
 		case 47:    DvElementSun                        dvSun;                  break;
 		case 48:    DvElementCameraExposure             dvCameraExposure;       break;
 		case 49:    DvElementTime                       dvTime;                 break;
@@ -211,13 +274,12 @@ typedef struct
 		case 144:   DvElementModelFade                  dvModelFade;            break;
 		case 156:   DvElementPathInterpolation          dvPathInterpolation;    break;
 		case 168:   DvElementVariablePointLight         dvPointLight;           break;
-		case 177:   DvElementEffect                     dvEffect;               break;
+		
 		case 276:   DvElementCameraOffset               dvCameraOffset;         break;
 		case 285:   DvElementComplexAnimation           dvComplexAnimation;     break;
 		case 290:   DvElementCameraControlParam         dvCameraControlParam;   break;
-		default: Warning("Not implemented DvElement detected!"); break;
-	}
+		default: Warning("Not implemented DvElement detected!"); break; */
 	if (childElementsCount) DvElementBase childElements[childElementsCount];
     
     
-}DvElementBase<optimize=false, name="DvElementBase", read=Str("Type: %s", EnumToString(type))>;
+} DvElementBase<optimize=false, name="DvElementBase", read=Str("Category: %s", EnumToString(category))>;

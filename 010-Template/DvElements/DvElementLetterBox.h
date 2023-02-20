@@ -1,5 +1,5 @@
 typedef struct
 {
-	float unk24[32];
+	float data[32];
     
 }DvElementLetterBox<optimize=false, name="DvElementLetterBox">;
