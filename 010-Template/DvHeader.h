@@ -18,19 +18,36 @@ typedef struct
 	uint32 field_10[count];
 } DvUnknown1 <name="DvUnknown1">;
 
+typedef struct
+{
+	int32 condType<name = "Type">;
+    int32 parameterSize<name = "Parameters Size">;
+	byte padding[8]<name = "Padding", hidden = false>;
+	byte data[parameterSize];
+} ConditionData <optimize=false,name="ConditionData">;
 
-// Note: this implementation is terrible
-// Needs more research
+typedef struct
+{
+	int destPageIndex<name = "Destination Page ID">;
+	int conditionNum<name = "Condition Count">;
+	int conditionSize<name = "Condition Size">;
+	byte padding[4]<name = "Padding", hidden = false>;
+	ConditionData conditions[conditionNum];
+} TransitionData <optimize=false,name="TransitionData">;
+
+
+
+
 typedef struct
 {
 	SetRandomBackColor();
-	uint32 field_00;
-	uint32 field_04;
+	uint32 version;
+	uint32 flag;
 	uint32 frameStart <read=Str("%d",this / 100), write=(this = Atoi( value ) * 100 )>;
 	uint32 frameEnd  <read=Str("%d",this / 100), write=(this = Atoi( value ) * 100 )>;
 	uint32 transitionCount;
 	uint32 transitionSize;
-	uint32 skipFrame <read=Str("%d",this/100), write=(this = Atoi( value ) * 100 )>; // Needs to figure out
+	uint32 skipFrame <read=Str("%d",this/100), write=(this = Atoi( value ) * 100 )>; 
 	uint32 index;
 	uint32 skipLinkIndexNum;
 	uint32 padding[3];
@@ -43,7 +60,7 @@ typedef struct
 		int32 field_5c;
 	}
 	// Need to figure this struct
-	int32 field_60[transitionSize/4];
+	TransitionData transition[transitionCount];
 	
 } QTE <optimize=false,name="QTE", read=Str("%s",name), comment="Note: Name string using UTF-8. You need to change text encoding in 'View'">;
 
