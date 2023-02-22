@@ -1,3 +1,4 @@
+// TODO: MOVE INCLUDES TO SEPARATE FILE
 #include "DvElements/DvElementAtmosphereHeightFogParam.h"
 #include "DvElements/DvElementAura.h"
 #include "DvElements/DvElementAuraRoad.h"
@@ -43,7 +44,7 @@
 #include "DvElements/DvElementWeather.h"
 
 
-// Made it by guessing
+// TODO: FIND UNIMPLEMENTED ElementID
 enum <uint32> DvElementID
 {
 	//DvElementTypeCamera = 4,         
@@ -96,7 +97,7 @@ enum <uint32> DvElementID
 enum <uint32> DvElementCategory
 {
 	DummyNode = 0,
-	Path = 1,
+	RootPath = 1,
 	PathMotion,
 	Camera,
 	CameraMotion,
@@ -110,176 +111,313 @@ enum <uint32> DvElementCategory
 	Element,
 };
 
-struct DvElementBase;
-
-typedef struct
+void ReadNodes(int address)
 {
-    SetRandomBackColor();
-    GUID guid;
-    DvElementCategory category;
-    uint32 nodeSize <read=Str("%d",this * 4), write=(this = Atoi( value ) / 4 )>; 
-    uint32 childElementsCount;
-    uint32 flags;
-    uint32 priority;
-    uint32 field_24;
-    uint32 field_28;
-    uint32 field_2c;
-	dvString elementName;
-	switch (category)
+    if (address <= 0) return;
+
+    FSeek(address);
+
+    struct Nodes
     {
-		case Path:
+        ReadNode();
+    } nodes<name = "Nodes">;
+}
+
+void ReadNode()
+{
+    struct Node
+    {
+        local DvElementCategory m_category;
+        local string m_name;
+        local int m_childCount;
+        local int m_baseSize;
+
+        struct NodeProperties
+        {
+            GUID guid <name = "GUID">;
+            DvElementCategory category <name = "Category">;
+            int32 nodeSize <name = "Node Size", read=Str("%d",this * 4), write=(this = Atoi( value ) / 4 )>;
+            int32 childCount <name = "Child Count">;
+            uint32 flag <name = "Flags">;
+            int priority <name = "Priority">;
+            byte padding[12] <name = "Padding", hidden = false>;
+            dvString name <name = "Name">;
+
+            m_name = GetNameOfNode(name.str, category);
+            m_category = category;
+            m_childCount = childCount;
+            m_baseSize = nodeSize;
+        } nodeProperties<name = "Node Properties">;
+		
+		if (m_category == Element)
 		{
-			Matrix44 mtx;
-			uint32 field_80;
-			uint32 field_84;
-			uint32 field_88;
-			uint32 field_8c;
-			break;
+			struct ElementProperties
+			{
+				DvElementID elementID <name = "Element ID">;
+				float frameStart <name = "Frame Start">;
+				float frameEnd <name = "Frame End">;
+				int32 version <name = "Version">;
+				uint32 flag <name = "Flag">;
+				uint32 playType <name = "Play Type">;
+				uint32 updateTiming <name = "Update Timing Mode">;
+				uint32 padding <name = "Padding">;
+			} elementProperties <name = "Element Properties">;
 		}
-		case Camera:	
+
+        local int i = 0;
+		
+		
+		// TODO: CLEANUP ELEMENT DETECTION
+        if (IsKnownCategory(m_category)) ReadCategory(m_baseSize, m_category);
+        else
+        {
+            switch (m_category)
+            {
+                default: Printf("Don't know how to handle category %s\n", EnumToString(m_category));
+				
+                case CharacterBehavior:
+                    struct UnknownInfo1
+                    {
+                        local int size = m_baseSize * 4;
+                        byte unkBytes[size];
+                    } unkinf1<name = "Unknown Info">;
+                    break;
+
+                case Element:
+					if (IsKnownElement(elementProperties.elementID))
+						switch (elementProperties.elementID)
+						{
+							case 3:		uint32							dvUnknown1[4];			break;
+							case 5:		DvElementPathAdjustment			dvPathAdjustment;       break;
+							case 7:		DvElementCameraShakeLoop		dvCameraShakeLoop;		break;
+							case 8:		DvElementEffect					dvEffect;				break;
+							case 13:	DvElementUVAnimation			dvUVAnimation;			break;
+							case 14:	DvElementVisibilityAnimation	dvUVAnimation;			break;
+							case 15:	DvElementMaterialAnimation		dvMaterialAnimation;	break;
+							case 16:	DvElementComplexAnimation		dvComplexAnimation;		break;
+							case 17:	DvElementCameraOffset			dvCameraOffset;			break;
+							case 21:	DvElementGameCamera				dvGameCamera;			break;
+							case 1001:	DvElementDOF					dvDOF;					break;
+							case 1003:	DvElementCameraExposure			dvCameraExposure;		break;
+							case 1004:	DvElementShadowResolution		dvShadowResolution;		break;
+							case 1008:	DvElementChromaticAberration	dvChromaticAberration;	break;
+							case 1009:	DvElementVignette				dvVignette;				break;
+							case 1010:	DvElementFade					dvFade;					break;
+							case 1011:	DvElementLetterBox				dvLetterBox;			break;
+							case 1015:	DvElementCaption				dvCaption;				break;
+							case 1016:	DvElementSound					dvSound;				break;
+							case 1017:	DvElementTime					dvTime;					break;
+							case 1018:	DvElementSun					dvSun;					break;
+							case 1023:	DvElementDitherParam			dvDitherParam;			break;
+							case 1024:	DvElementQTE					dvQTE;					break;
+							case 1027:	DvElementAura					dvAura;					break;
+							case 1028:	DvElementMotion					dvMotion;				break;
+							case 1029:	DvElementCyberSpaceNoise		dvCyberSpaceNoise;		break;
+							case 1034:	DvElementWeather				dvWeather;				break;
+							case 1036:	DvElementVariablePointLight		dvPointLight;			break;
+							//case 1032:	DvElementMovieView		dvMovieView;	break;
+							//case 1037:	DvElementOpeningLogo	dvOpeningLogo;	break;
+						}
+					else
+                    struct UnknownInfo
+                    {
+                        local int size = m_baseSize * 4 - sizeof(ElementProperties);
+                        byte unkBytes[size];
+                    } unkinfo<name = "Unknown Info">;
+                    break;
+            }
+        }
+		
+		
+
+        if (m_childCount > 0)
+            struct Children
+            {
+                for (i = 0; i < m_childCount; i++)
+                    ReadNode();
+            } children<name = "Children">;
+
+        //  byte unky[GetSizeOfNode(nodeSize, category)];
+
+    } node<name = (m_name)>;
+}
+
+string GetNameOfNode(char nodename[64], DvElementCategory cat)
+{
+    local string categoryName;
+    local string nodeName = (Strlen(nodename) <= 0 ? "Node" : nodename);
+
+    switch (cat)
+    {
+        default: categoryName = "Unknown"; break;
+        case RootPath: categoryName = "Path"; break;
+        case PathMotion: categoryName = "Path Motion"; break;
+        case Camera: categoryName = "Camera"; break;
+        case CameraMotion: categoryName = "Camera Motion"; break;
+        case Character: categoryName = "Character"; break;
+        case CharacterMotion: categoryName = "Character Motion"; break;
+        case CharacterBehavior: categoryName = "Character Behavior"; break;
+        case ModelCustom: categoryName = "Custom Model"; break;
+        case Asset: categoryName = "Asset"; break;
+        case MotionModel: categoryName = "Motion Model"; break;
+        case ModelNode: categoryName = "Model Node"; break;
+        case Element: categoryName = "Element"; break;
+    }
+
+    return nodeName + " (" + categoryName + ")";
+}
+
+// TODO: REMOVE IN FUTURE UPDATES
+byte IsKnownElement(DvElementID id)
+{
+    switch (id)
+    {
+        default: return 0;
+        case 3:	return 1;
+		case 5:	return 1;
+		case 7:	return 1;
+		case 8:	return 1;
+		case 13: return 1;
+		case 14: return 1;
+		case 15: return 1;
+		case 16: return 1;
+		case 17: return 1;
+		case 21: return 1;
+		case 1001: return 1;
+		case 1003:	 return 1;
+		case 1004:	 return 1;
+		case 1008:	 return 1;
+		case 1009:	 return 1;
+		case 1010:	 return 1;
+		case 1011:	 return 1;
+		case 1015:	 return 1;
+		case 1016:	 return 1;
+		case 1017:	 return 1;
+		case 1018:	 return 1;
+		case 1023:	 return 1;
+		case 1024:	 return 1;
+		case 1027:	 return 1;
+		case 1028:	 return 1;
+		case 1029:	 return 1;
+		case 1034:	 return 1;
+		case 1036:	 return 1;
+		
+    }
+}
+
+// TODO: REMOVE IN FUTURE UPDATES
+byte IsKnownCategory(DvElementCategory cat)
+{
+    switch (cat)
+    {
+        default: return 0;
+        case RootPath: return 1;
+        case Camera: return 1;
+		case CameraMotion: return 1;
+        case Character: return 1;
+		case CharacterMotion: return 1;
+		case ModelCustom: return 1;
+		case ModelNode: return 1;
+		case MotionModel: return 1;
+		
+    }
+}
+
+
+// TODO: CLEANUP
+void ReadCategory(uint baseSize, DvElementCategory cat)
+{
+    switch (cat)
+    {
+        case RootPath:
+            struct TrackInfo
+            {
+                Matrix44 matrix<name = "Matrix">;
+                uint flag<name = "Flag">;
+                byte padding[12]<hidden = true>;
+            } trackinfo<name = "Track Info">;
+            break;
+        case Camera:	
 		case CameraMotion:
-		{
-			uint32 field_80;
-			uint32 field_84;
-			uint32 field_88;
-			uint32 field_8c;
-			break;
-		}
-		case Character: 
-		{	
-			uint32 field_40;
-			DvElementModel	dvModel;
-			break;
-		}
+            struct CameraInfo
+            {
+                uint32 field_80;
+				uint32 frameStart <read=Str("%d",this / 100), write=(this = Atoi( value ) * 100 )>;
+				uint32 frameEnd  <read=Str("%d",this / 100), write=(this = Atoi( value ) * 100 )>;
+				uint32 field_8c;
+            } camInfo <name = "Camera Info">;
+            break;
+        case Character:
+            struct CharacterInfo
+            {
+                uint32 field_00;
+				dvString name1;
+				dvString name2;
+				dvString name3;
+				char unk[0x4C];
+            } charInfo <name = "Character Info">;
+            break;
 		case CharacterMotion:
 		{
-			uint32 field_40[4];
-			// Mostly is Dst0000 (DiEventState 0000)
-			char asmStateName[8];
-			float field_50;
-			uint32 field_54;
-			DvElementMotion dvMotion;
+			struct CharacterMotionInfo
+            {
+				uint32 field_00 <hidden=true>;
+				// Need to figure out
+				uint32 frameStart <read=Str("%d",this / 100), write=(this = Atoi( value ) * 100 )>;
+				uint32 frameEnd  <read=Str("%d",this / 100), write=(this = Atoi( value ) * 100 )>;
+				uint32 field_0c <hidden=true>;
+				// Mostly is Dst0000 (DiEventState 0000)
+				char asmStateName[8] <name = "ASM State Name">;
+				// is speed
+				float field_50;
+				uint32 field_54;
+				uint32 field_58[4];
+			} charInfo<name = "Character Motion Info">;
 			break;
 		}
 		case ModelCustom: 
 		{	
-			uint32 field_40;
-			DvElementModel	dvModel;
+			 struct ModelCustomInfo
+            {
+                uint32 field_00;
+				dvString name1;
+				dvString name2;
+				dvString name3;
+				char unk[0x4C];
+            } modelCustomInfo<name = "Custom Model Info">;
 			break;
 		}
 		case MotionModel:
 		{
-			uint32 field_40[4];
-			// Mostly is Dst0000 (DiEventState 0000)
-			char asmStateName[8];
-			float field_50;
-			uint32 field_54;
-			DvElementMotion dvMotion;
+			struct MotionModelInfo
+            {
+				uint32 field_00 <hidden=true>;
+				// Need to figure out
+				uint32 frameStart <read=Str("%d",this / 100), write=(this = Atoi( value ) * 100 )>;
+				uint32 frameEnd  <read=Str("%d",this / 100), write=(this = Atoi( value ) * 100 )>;
+				uint32 field_0c <hidden=true>;
+				// Mostly is Dst0000 (DiEventState 0000)
+				char asmStateName[8] <name = "ASM State Name">;
+				// is speed
+				float field_50;
+				uint32 field_54;
+				uint32 field_58[4];
+			} charInfo<name = "Motion Model Info">;
 			break;
 		}
-		case ModelNode:
-		{
-			DvElementID id;
-			dvString boneName;
-			uint32 field_4c;
-			uint32 field_50;
-			uint32 field_54;
-			switch (id)
-			{
-				case 8:   DvElementEffect	dvEffect;	break;
-			}
-			break;
-		}
-		case Element:
-		{
-			DvElementID id;
-			float frameStart;
-			float frameEnd;
-			uint32 version;
-			uint32 flag;
-			uint32 playType;
-			uint32 updateTiming;
-			uint32 field_5c;
-			switch (id)
-			{
-				case 3:		uint32							dvUnknown1[4];			break;
-				case 5:		DvElementPathAdjustment			dvPathAdjustment;       break;
-				case 7:		DvElementCameraShakeLoop		dvCameraShakeLoop;		break;
-				case 8:		DvElementEffect					dvEffect;				break;
-				case 13:	DvElementUVAnimation			dvUVAnimation;			break;
-				case 14:	DvElementVisibilityAnimation	dvUVAnimation;			break;
-				case 15:	DvElementMaterialAnimation		dvMaterialAnimation;	break;
-				case 16:	DvElementComplexAnimation		dvComplexAnimation;		break;
-				case 17:	DvElementCameraOffset			dvCameraOffset;			break;
-				case 21:	DvElementGameCamera				dvGameCamera;			break;
-				case 1001:	DvElementDOF					dvDOF;					break;
-				case 1003:	DvElementCameraExposure			dvCameraExposure;		break;
-				case 1004:	DvElementShadowResolution		dvShadowResolution;		break;
-				case 1008:	DvElementChromaticAberration	dvChromaticAberration;	break;
-				case 1009:	DvElementVignette				dvVignette;				break;
-				case 1010:	DvElementFade					dvFade;					break;
-				case 1011:	DvElementLetterBox				dvLetterBox;			break;
-				case 1015:	DvElementCaption				dvCaption;				break;
-				case 1016:	DvElementSound					dvSound;				break;
-				case 1017:	DvElementTime					dvTime;					break;
-				case 1018:	DvElementSun					dvSun;					break;
-				case 1023:	DvElementDitherParam			dvDitherParam;			break;
-				case 1024:	DvElementQTE					dvQTE;					break;
-				case 1027:	DvElementAura					dvAura;					break;
-				case 1028:	DvElementMotion					dvMotion;				break;
-				case 1029:	DvElementCyberSpaceNoise		dvCyberSpaceNoise;		break;
-				case 1034:	DvElementWeather				dvWeather;				break;
-				case 1036:	DvElementVariablePointLight		dvPointLight;			break;
-				//case 1032:	DvElementMovieView		dvMovieView;	break;
-				//case 1037:	DvElementOpeningLogo	dvOpeningLogo;	break;
-			}
+		case ModelNode: 
+		{	
+			 struct ModelNodeInfo
+            {
+                uint32 field_00;
+				dvString name1;
+				uint32 field_44;
+				uint32 field_48;
+				uint32 field_4c;
+            } modelNodeInfo<name = "Model Node Info">;
 			break;
 		}
 		
-	}
-    /* switch (id)
-    {
-		case 4:     DvElementCamera                     dvCamera;               break;
-
-		case 10:    DvElementShadowResolution           dvShadowResolution;     break;
-		case 12:    DvElementMotion                     dvMotion;               break;
-		case 13:    DvElementModelClipping              dvModelClipping;        break;
-
-		case 16:    DvElementNearFarSettings            dvNearFar;              break;
-		case 20:    DvElementRootPath                   dvRootPath;             break;
-		case 25:    DvElementGeneralTrigger             dvGeneralTrigger;       break;
-		case 26:    DvElementSound                      dvSound;                break;
-		case 28:    DvElementPathAdjustment             dvPathAdjustment;       break;
-		case 29:    DvElementUVAnimation                dvUVAnim;               break;
-		case 34:    DvElementGameCamera                 dvGameCamera;           break;
-		case 40:    DvElementLetterBox                  dvLetterBox;            break;
-		case 41:    DvElementCyberSpaceNoise            dvCyberSpaceNoise;      break;
-		
-		case 47:    DvElementSun                        dvSun;                  break;
-		case 48:    DvElementCameraExposure             dvCameraExposure;       break;
-		case 49:    DvElementTime                       dvTime;                 break;
-		case 51:    DvElementBloomParam                 dvBloom;                break;
-		case 57:    DvElementChromaticAberration        dvChromaticAberration;  break;
-		case 59:    DvElementAura                       dvAura;                 break;
-		case 60:    DvElementDOF                        dvDOF;                  break;
-		case 68:    DvElementModel                      dvModel;                break;
-		case 73:    DvElementAuraRoad                   dvAuraRoad;             break;
-		case 80:    DvElementCameraShakeLoop            dvCameraShakeLoop;      break;
-		case 83:    DvElementAtmosphereHeightFogParam   dvCameraHeightFog;      break;
-		case 88:    DvElementUnknownCamera              dvUnknownCamera;        break;
-		case 89:    DvElementLookAtIK                   dvLookAtIK;             break;
-		case 90:    DvElementVignette                   dvCameraVignette;       break;
-		case 95:    DvElementSpotlightModel             dvSpotlightModel;       break;
-		case 104:   DvElementQTE                        dvQTE;                  break;
-		case 144:   DvElementModelFade                  dvModelFade;            break;
-		case 156:   DvElementPathInterpolation          dvPathInterpolation;    break;
-		case 168:   DvElementVariablePointLight         dvPointLight;           break;
-		
-		case 276:   DvElementCameraOffset               dvCameraOffset;         break;
-		case 285:   DvElementComplexAnimation           dvComplexAnimation;     break;
-		case 290:   DvElementCameraControlParam         dvCameraControlParam;   break;
-		default: Warning("Not implemented DvElement detected!"); break; */
-	if (childElementsCount) DvElementBase childElements[childElementsCount];
-    
-    
-} DvElementBase<optimize=false, name="DvElementBase", read=Str("Category: %s", EnumToString(category))>;
+      
+    }
+}

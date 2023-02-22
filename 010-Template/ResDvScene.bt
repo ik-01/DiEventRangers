@@ -4,9 +4,9 @@
 //  File: ResDvScene.bt
 //  Authors: ik-01
 //  Version: 
-//  Purpose: DiEvent (.dvscene) format reserach
+//  Purpose: Researching DiEvent file format (.dvscene) from Sonic Frontiers
 //  Category: 
-//  File Mask: 
+//  File Mask: .dvscene
 //  ID Bytes: 
 //  History: 
 //------------------------------------------------
@@ -15,21 +15,19 @@
 
 typedef struct
 {
-	uint32 field_00;
-	uint32 dvResourcesOffset <format=hex, read=GetFixedOffset>;
-	
-	FSeek(dvResourcesOffset + RELATIVE_OFFSET);
-	DvResources dvResources;
-	FSeek(0x08);
-	
-	uint32 field_08;
-	uint32 field_0c;
-	uint32 field_10;
-	uint32 field_14;
-	uint32 field_18;
-	uint32 field_1c;
-	
-	DvHeader dvHeader;
+	SetRandomBackColor();
+	struct DvSceneHeader 
+	{
+		uint32 cmnbinptr <name = "Common Pointer", read = GetFixedOffset(this)>;
+		uint32 resbinptr <name = "Resource Pointer", read = GetFixedOffset(this)>;
+		uint32 unkpointers[6] <hidden = true>;
+	} dvscene <name = "DvSceneHeader">;
+
+    m_relOffset = sizeof(DvSceneHeader);
+    
+	ReadDvCommon(dvscene.cmnbinptr + m_relOffset);
+
+    ReadDvResource(dvscene.resbinptr + m_relOffset);
 	
 } ResDvScene <name=Str("%s", FileNameGetBase(GetFileName()))>;
 

@@ -32,7 +32,7 @@ uint32 SetRandomBackColor()
     return color;
 }
 
-local uint32 RELATIVE_OFFSET = 0x20;
+local uint32 m_relOffset = 0;
 
 typedef struct {float x,y,z,w;} Vector4<read=Str("%.3f, %.3f, %.3f, %.3f", x,y,z,w)>;
 
@@ -43,6 +43,6 @@ typedef struct {char str[0x40];} dvString<read=Str("%s", str)>;
 string GetFixedOffset(uint32 offset)
 {
 	string result;
-	SPrintf(result,"0x%X", offset + RELATIVE_OFFSET);
+	SPrintf(result,"0x%X", offset + m_relOffset);
 	return result;
 }
