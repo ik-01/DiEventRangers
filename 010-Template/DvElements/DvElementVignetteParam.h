@@ -7,4 +7,4 @@ typedef struct
 	float data5[15];
 	float data6[0x20];
     
-}DvElementVignette<optimize=false, name="DvElementVignette">;
+}DvElementVignetteParam<optimize=false, name="DvElementVignetteParam">;

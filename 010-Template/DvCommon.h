@@ -16,7 +16,11 @@ typedef struct
 {
 	SetRandomBackColor();
 	DvObject disableFrameInfoObject <name="Disable Frame Info Object">;
-	uint32 disableFrame[disableFrameInfoObject.count] <name="Disable Frame">;
+	struct DvDisableFrameInfoData
+	{
+		float Start <name="Start">;
+		float End <name="End">;;
+	}disableFrameInfoData[disableFrameInfoObject.count] <name="Disable Frame Info">;
 } DvDisableFrameInfo <name="DvDisableFrameInfo">;
 
 typedef struct

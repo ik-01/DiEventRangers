@@ -18,6 +18,6 @@ typedef struct
 {
 	char captionName[0x10] <name="Caption Name">;
 	LanguageType language <name="Language">;
-	uint32 field_1c;		// is padding?
+	uint32 Padding <name="Padding">;
     
 }DvElementCaption<optimize=false, read=Str("%s (%s)", captionName, EnumToString(language)), name="DvElementCaption">;

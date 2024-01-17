@@ -1,6 +1,6 @@
 typedef struct
 {
 	uint32 field_60[8];
-	float field_80[128];
+	float curveData[128] <name="Curve Data", optimize=false>;
     
 }DvElementModelFade<optimize=false, name="DvElementModelFade">;

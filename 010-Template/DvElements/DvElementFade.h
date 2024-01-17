@@ -1,9 +1,6 @@
 typedef struct
 {
-	byte field_60[4];
-	uint32 field_64;
-	uint32 field_68;
-	uint32 field_6c;
-    float curveData[32];
+	RGBA32 color <name="Color", read=Str("RGBA: [%d,%d,%d,%d]", this.R,this.G,this.B,this.A)>;
+    float curveData[32] <name="Curve Data", optimize=false>;
     
 }DvElementFade<optimize=false,  name="DvElementFade">;

@@ -29,16 +29,16 @@ enum <uint32> QTEButton
 
 typedef struct
 {
-	QTEType field_60;
-	QTEButton field_64;
-	float redCircleSize;
-	float redCircleThickness;
-	float whiteLineThickness;
-	float whiteLineSpeed;
-	float multiplier;
-	float redCircleOutlineThickness;
-	float whiteLineOutlineThickness;
-	uint32 failCount;
+	QTEType qteType <name="QTE Type">;
+	QTEButton qteButton <name="QTE Button">;
+	float redCircleSize <name="Red Circle Size">;
+	float redCircleThickness <name="Red Circle Thickness">;
+	float whiteLineThickness <name="White Line Thickness">;
+	float whiteLineSpeed <name="White Line Speed">;
+	float multiplier  <name="Multiplier">;
+	float redCircleOutlineThickness <name="Red Circle Outline Thickness">;
+	float whiteLineOutlineThickness <name="White Line Outline Thickness">;
+	uint32 failCount <name="Fail Count">;
 	uint32 field_88;
 	char field_8c[0x40];
 	float field_cc;
