@@ -32,6 +32,7 @@
 #include "DvElements/DvElementQTE.h"
 #include "DvElements/DvElementRootPath.h"
 #include "DvElements/DvElementShadowResolution.h"
+#include "DvElements/DvElementSonicCamera.h"
 #include "DvElements/DvElementSound.h"
 #include "DvElements/DvElementSpotlightModel.h"
 #include "DvElements/DvElementSun.h"
@@ -83,8 +84,8 @@ enum<uint32> DvElementID
 	ElementID_MaterialAnimation = 15,
 	ElementID_CompositeAnimation = 16,
 	ElementID_CameraOffset = 17,
-	// ModelFade = 18,
-	// SonicCamera = 20,
+	// ElementID_ModelFade = 18,
+	ElementID_SonicCamera = 20,
 	ElementID_GameCamera = 21,
 	//ElementID_SpotlightModel = 26,
 
@@ -123,8 +124,9 @@ enum<uint32> DvElementID
 
 enum<uint32> DvElementCategory
 {
-	DummyNode = 0,
-	RootPath = 1,
+	Dummy = 0,
+	Root = 0,
+	Path = 1,
 	PathMotion,
 	Camera,
 	CameraMotion,
@@ -161,6 +163,7 @@ void ReadElement(DvElementID id)
 		case ElementID_MaterialAnimation:	DvElementMaterialAnimation		dvMaterialAnimation;	break;
 		case ElementID_CompositeAnimation:	DvElementComplexAnimation		dvComplexAnimation;		break;
 		case ElementID_CameraOffset:		DvElementCameraOffset			dvCameraOffset;			break;
+		case ElementID_SonicCamera:			DvElementSonicCamera			dvSonicCamera;			break;
 		case ElementID_GameCamera:			DvElementGameCamera				dvGameCamera;			break;
 		//case ElementID_SpotlightModel:		break;
 		case ElementID_DOF:					DvElementDOF					dvDOF;					break;
@@ -210,7 +213,7 @@ string GetNameOfNode(char nodename[64], DvElementCategory category)
     switch (category)
     {
         default: categoryName = "Unknown"; break;
-        case RootPath: categoryName = "Path"; break;
+        case Path: categoryName = "Path"; break;
         case PathMotion: categoryName = "Path Motion"; break;
         case Camera: categoryName = "Camera"; break;
         case CameraMotion: categoryName = "Camera Motion"; break;

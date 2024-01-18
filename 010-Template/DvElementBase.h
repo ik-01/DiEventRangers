@@ -23,7 +23,7 @@ void ReadNode()
         SetRandomBackColor();
         struct NodeProperties
         {
-            GUID guid <name = "GUID">;
+            GUID dv_guid <name = "GUID">;
             DvElementCategory category <name = "Category">;
             int32 nodeSize <name = "Node Size", read=Str("%d",this * 4), write=(this = Atoi( value ) / 4 )>;
             int32 childCount <name = "Child Count">;
@@ -58,12 +58,12 @@ void ReadCategory(DvElementCategory category)
 {
 	switch (category)
 	{
-	case RootPath:
+	case Path:
 	{
 		struct RootPathInfo
 		{
 			Matrix44 matrix<name = "Matrix">;
-			uint flag<name = "Flag">;
+			uint flag<name = "Flags">;
 			byte padding[12]<hidden = true>;
 		} rootPathInfo<name = "Root Path Info">;
 		break;
