@@ -10,8 +10,6 @@ enum <uint32> boss_name_type
 
 typedef struct
 {
-
-	uint32 field_00;
+    uint32 field_00;
     boss_name_type boss_name <name= "Boss Name">;
-    
 }DvElementBossName<optimize=false, name="DvElementBossName">;
