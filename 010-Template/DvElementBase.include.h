@@ -2,6 +2,7 @@
 #include "DvElements/DvElementAura.h"
 #include "DvElements/DvElementAuraRoad.h"
 #include "DvElements/DvElementBloomParam.h"
+#include "DvElements/DvElementBossName.h"
 #include "DvElements/DvElementCamera.h"
 #include "DvElements/DvElementCameraControlParam.h"
 #include "DvElements/DvElementCameraExposure.h"
@@ -101,7 +102,7 @@ enum<uint32> DvElementID
 	ElementID_Fade = 1010,
 	ElementID_LetterBox = 1011,
 	ElementID_ModelClipping = 1012,
-	// BossCutoff = 1014,
+	ElementID_BossName = 1014,
 	ElementID_Caption = 1015,
 	ElementID_Sound = 1016,
 	ElementID_Time = 1017,
@@ -180,13 +181,14 @@ void ReadElement(DvElementID id)
 		case ElementID_Fade:						DvElementFade						dvFade;						break;
 		case ElementID_LetterBox:					DvElementLetterBox					dvLetterBox;				break;
 		case ElementID_ModelClipping:																				break;
+		case ElementID_BossName:					DvElementBossName					dvBossName;					break;
 		case ElementID_Caption:						DvElementCaption					dvCaption;					break;
 		case ElementID_Sound:						DvElementSound						dvSound;					break;
 		case ElementID_Time:						DvElementTime						dvTime;						break;
 		case ElementID_Sun:							DvElementSun						dvSun;						break;
 		case ElementID_LookAtIK:																					break;
 		case ElementID_CameraBlurParam:																				break;
-		case ElementID_GeneralTrigger:																				break;
+		case ElementID_GeneralTrigger:				DvElementGeneralTrigger				dvGeneralTrigger;			break;																			break;
 		case ElementID_DitherParam:					DvElementDitherParam				dvDitherParam;				break;
 		case ElementID_QTE:							DvElementQTE						dvQTE;						break;
 		case ElementID_OverrideAsm:					DvElementOverrideAsm				dvOverrideAsm;				break;
@@ -250,11 +252,9 @@ byte IsUnknownElement(DvElementID id)
 		case 26: return true; break;
 		case 1002: return true; break;
 		case 1007: return true; break;
-		case 1014: return true; break;
 		case ElementID_ModelClipping: return true; break;
 		case ElementID_LookAtIK: return true; break;
 		case ElementID_CameraBlurParam: return true; break;
-		case ElementID_GeneralTrigger: return true; break;
 		case ElementID_ChangeTimeScale: return true; break;
 		case ElementID_AuraRoad: return true; break;
 		case ElementID_ModelClipping: return true; break;
