@@ -8,7 +8,7 @@
 #include "DvElements/DvElementCameraOffset.h"
 #include "DvElements/DvElementCameraShakeLoop.h"
 #include "DvElements/DvElementCaption.h"
-#include "DvElements/DvElementComplexAnimation.h"
+#include "DvElements/DvElementCompositeAnimation.h"
 #include "DvElements/DvElementChromaticAberration.h"
 #include "DvElements/DvElementCyberSpaceNoise.h"
 #include "DvElements/DvElementDOF.h"
@@ -27,9 +27,11 @@
 #include "DvElements/DvElementMotion.h"
 #include "DvElements/DvElementMovieView.h"
 #include "DvElements/DvElementNearFarSettings.h"
+#include "DvElements/DvElementOverrideAsm.h"
 #include "DvElements/DvElementPathAdjustment.h"
 #include "DvElements/DvElementPathInterpolation.h"
 #include "DvElements/DvElementQTE.h"
+#include "DvElements/DvElementRifleBeastLighting.h"
 #include "DvElements/DvElementRootPath.h"
 #include "DvElements/DvElementShadowResolution.h"
 #include "DvElements/DvElementSonicCamera.h"
@@ -93,7 +95,7 @@ enum<uint32> DvElementID
 	//ElementID_ColorCorrection = 1002,
 	ElementID_CameraExposure = 1003,
 	ElementID_ShadowResolution = 1004,
-	// HeightFog = 1007,
+	ElementID_AtmosphereHeightFogParam = 1007,
 	ElementID_ChromaticAberration = 1008,
 	ElementID_VignetteParam = 1009,
 	ElementID_Fade = 1010,
@@ -103,6 +105,7 @@ enum<uint32> DvElementID
 	ElementID_Caption = 1015,
 	ElementID_Sound = 1016,
 	ElementID_Time = 1017,
+	ElementID_Sun = 1018,
 	ElementID_LookAtIK = 1019,
 	ElementID_CameraBlurParam = 1020,
 	ElementID_GeneralTrigger = 1021,
@@ -122,7 +125,7 @@ enum<uint32> DvElementID
 	ElementID_RifleBeastLighting = 1043
 };
 
-enum<uint32> DvElementCategory
+enum<uint32> DvNodeType
 {
 	Dummy = 0,
 	Root = 0,
@@ -147,53 +150,56 @@ enum<uint32> DvElementCategory
 	InvalidNode = 0xFFFFFFFF,
 };
 
+// TODO: Reformat coding style when all elements will be found
 void ReadElement(DvElementID id)
 {
 	switch (id)
 	{
-		case ElementID_DrawOff:				DvElementDrawOff				dvElementDrawOff;		break;
-		case ElementID_PathAdjustment:		DvElementPathAdjustment			dvPathAdjustment;		break;
-		case ElementID_CameraShake:																	break;
-		case ElementID_CameraShakeLoop:		DvElementCameraShakeLoop		dvCameraShakeLoop;		break;
-		case ElementID_Effect:				DvElementEffect					dvEffect;				break;
-		case ElementID_PathInterpolation:															break;
-		case ElementID_Culling:																		break;
-		case ElementID_UVAnimation:			DvElementUVAnimation			dvUVAnimation;			break;
-		case ElementID_VisibilityAnimation:		break;
-		case ElementID_MaterialAnimation:	DvElementMaterialAnimation		dvMaterialAnimation;	break;
-		case ElementID_CompositeAnimation:	DvElementComplexAnimation		dvComplexAnimation;		break;
-		case ElementID_CameraOffset:		DvElementCameraOffset			dvCameraOffset;			break;
-		case ElementID_SonicCamera:			DvElementSonicCamera			dvSonicCamera;			break;
-		case ElementID_GameCamera:			DvElementGameCamera				dvGameCamera;			break;
+		case ElementID_DrawOff:						DvElementDrawOff					dvElementDrawOff;			break;
+		case ElementID_PathAdjustment:				DvElementPathAdjustment				dvPathAdjustment;			break;
+		case ElementID_CameraShake:																					break;
+		case ElementID_CameraShakeLoop:				DvElementCameraShakeLoop			dvCameraShakeLoop;			break;
+		case ElementID_Effect:						DvElementEffect						dvEffect;					break;
+		case ElementID_PathInterpolation:																			break;
+		case ElementID_Culling:																						break;
+		case ElementID_UVAnimation:					DvElementUVAnimation				dvUVAnimation;				break;
+		case ElementID_VisibilityAnimation:																			break;
+		case ElementID_MaterialAnimation:			DvElementMaterialAnimation			dvMaterialAnimation;		break;
+		case ElementID_CompositeAnimation:			DvElementCompositeAnimation			dvCompositeAnimation;		break;
+		case ElementID_CameraOffset:				DvElementCameraOffset				dvCameraOffset;				break;
+		case ElementID_SonicCamera:					DvElementSonicCamera				dvSonicCamera;				break;
+		case ElementID_GameCamera:					DvElementGameCamera					dvGameCamera;				break;
 		//case ElementID_SpotlightModel:		break;
-		case ElementID_DOF:					DvElementDOF					dvDOF;					break;
+		case ElementID_DOF:							DvElementDOF						dvDOF;						break;
 		//case ElementID_ColorCorrection:		break;
-		case ElementID_CameraExposure:		DvElementCameraExposure			dvCameraExposure;		break;
-		case ElementID_ShadowResolution:	DvElementShadowResolution		dvShadowResolution;		break;
-		case ElementID_ChromaticAberration:	DvElementChromaticAberration	dvChromaticAberration;	break;
-		case ElementID_VignetteParam:		DvElementVignetteParam			dvVignetteParam;		break;
-		case ElementID_Fade:				DvElementFade					dvFade;					break;
-		case ElementID_LetterBox:			DvElementLetterBox				dvLetterBox;			break;
-		case ElementID_ModelClipping:																break;
-		case ElementID_Caption:				DvElementCaption				dvCaption;				break;
-		case ElementID_Sound:				DvElementSound					dvSound;				break;
-		case ElementID_Time:				DvElementTime					dvTime;					break;
-		case ElementID_LookAtIK:																	break;
-		case ElementID_CameraBlurParam:																break;
-		case ElementID_GeneralTrigger:																break;
-		case ElementID_DitherParam:			DvElementDitherParam			dvDitherParam;			break;
-		case ElementID_QTE:					DvElementQTE					dvQTE;					break;
-		case ElementID_OverrideAsm:																	break;
-		case ElementID_Aura:				DvElementAura					dvAura;					break;
-		case ElementID_ChangeTimeScale:																break;
-		case ElementID_CyberSpaceNoise:		DvElementCyberSpaceNoise		dvCyberSpaceNoise;		break;
-		case ElementID_AuraRoad:																	break;
-		case ElementID_ModelClipping:																break;
-		case ElementID_MovieView:			DvElementMovieView				dvMovieView;			break;
-		case ElementID_Weather:				DvElementWeather				dvWeather;				break;
-		case ElementID_VariablePointLight:	DvElementVariablePointLight		dvPointLight; 			break;
-		case ElementID_TheEndCableObject:															break;
-		case ElementID_RifleBeastLighting:															break;
+		case ElementID_CameraExposure:				DvElementCameraExposure				dvCameraExposure;			break;
+		case ElementID_ShadowResolution:			DvElementShadowResolution			dvShadowResolution;			break;
+		case ElementID_AtmosphereHeightFogParam:	DvElementAtmosphereHeightFogParam	dvAtmosphereHeightFogParam;	break;
+		case ElementID_ChromaticAberration:			DvElementChromaticAberration		dvChromaticAberration;		break;
+		case ElementID_VignetteParam:				DvElementVignetteParam				dvVignetteParam;			break;
+		case ElementID_Fade:						DvElementFade						dvFade;						break;
+		case ElementID_LetterBox:					DvElementLetterBox					dvLetterBox;				break;
+		case ElementID_ModelClipping:																				break;
+		case ElementID_Caption:						DvElementCaption					dvCaption;					break;
+		case ElementID_Sound:						DvElementSound						dvSound;					break;
+		case ElementID_Time:						DvElementTime						dvTime;						break;
+		case ElementID_Sun:							DvElementSun						dvSun;						break;
+		case ElementID_LookAtIK:																					break;
+		case ElementID_CameraBlurParam:																				break;
+		case ElementID_GeneralTrigger:																				break;
+		case ElementID_DitherParam:					DvElementDitherParam				dvDitherParam;				break;
+		case ElementID_QTE:							DvElementQTE						dvQTE;						break;
+		case ElementID_OverrideAsm:					DvElementOverrideAsm				dvOverrideAsm;				break;
+		case ElementID_Aura:						DvElementAura						dvAura;						break;
+		case ElementID_ChangeTimeScale:																				break;
+		case ElementID_CyberSpaceNoise:				DvElementCyberSpaceNoise			dvCyberSpaceNoise;			break;
+		case ElementID_AuraRoad:																					break;
+		case ElementID_ModelClipping:																				break;
+		case ElementID_MovieView:					DvElementMovieView					dvMovieView;				break;
+		case ElementID_Weather:						DvElementWeather					dvWeather;					break;
+		case ElementID_VariablePointLight:			DvElementVariablePointLight			dvPointLight;				break;
+		case ElementID_TheEndCableObject:																			break;
+		case ElementID_RifleBeastLighting:			DvElementRifleBeastLighting			dvRifleBeastLighting;		break;
 		
 		// case 14:	DvElementVisibilityAnimation	dvUVAnimation;			break;
 
@@ -205,29 +211,28 @@ void ReadElement(DvElementID id)
 }
 
 
-string GetNameOfNode(char nodename[64], DvElementCategory category)
+string GetNodeTypeName(DvNodeType type)
 {
-    local string categoryName;
-    local string nodeName = (Strlen(nodename) <= 0 ? "Node" : nodename);
+    local string typeName;
 
-    switch (category)
+    switch (type)
     {
-        default: categoryName = "Unknown"; break;
-        case Path: categoryName = "Path"; break;
-        case PathMotion: categoryName = "Path Motion"; break;
-        case Camera: categoryName = "Camera"; break;
-        case CameraMotion: categoryName = "Camera Motion"; break;
-        case Character: categoryName = "Character"; break;
-        case CharacterMotion: categoryName = "Character Motion"; break;
-        case CharacterBehavior: categoryName = "Character Behavior"; break;
-        case ModelCustom: categoryName = "Custom Model"; break;
-        case Asset: categoryName = "Asset"; break;
-        case MotionModel: categoryName = "Motion Model"; break;
-        case ModelNode: categoryName = "Model Node"; break;
-        case Element: categoryName = "Element"; break;
+        default: typeName = "Unknown"; break;
+        case Path: typeName = "Path"; break;
+        case PathMotion: typeName = "Path Motion"; break;
+        case Camera: typeName = "Camera"; break;
+        case CameraMotion: typeName = "Camera Motion"; break;
+        case Character: typeName = "Character"; break;
+        case CharacterMotion: typeName = "Character Motion"; break;
+        case CharacterBehavior: typeName = "Character Behavior"; break;
+        case ModelCustom: typeName = "Custom Model"; break;
+        case Asset: typeName = "Asset"; break;
+        case MotionModel: typeName = "Motion Model"; break;
+        case ModelNode: typeName = "Model Node"; break;
+        case Element: typeName = "Element"; break;
     }
 
-    return nodeName + " (" + categoryName + ")";
+    return typeName;
 }
 
 // Until all nodes will be figured out
@@ -245,16 +250,15 @@ byte IsUnknownElement(DvElementID id)
 		case 26: return true; break;
 		case 1002: return true; break;
 		case 1007: return true; break;
+		case 1014: return true; break;
 		case ElementID_ModelClipping: return true; break;
 		case ElementID_LookAtIK: return true; break;
 		case ElementID_CameraBlurParam: return true; break;
 		case ElementID_GeneralTrigger: return true; break;
-		case ElementID_OverrideAsm: return true; break;
 		case ElementID_ChangeTimeScale: return true; break;
 		case ElementID_AuraRoad: return true; break;
 		case ElementID_ModelClipping: return true; break;
 		case ElementID_TheEndCableObject: return true; break;
-		case ElementID_RifleBeastLighting: return true; break;
 		default: return false; break;
 	}
 }

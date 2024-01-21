@@ -1,7 +1,7 @@
 enum <uint32> DvResourceKind
 {
 	ResourceKind_Dummy=0,
-    ResourceKind_tex=1,
+    ResourceKind_Texture=1,
     ResourceKind_Character=2,
     ResourceKind_Model=3,
     ResourceKind_MotionCamera=4,
@@ -21,7 +21,7 @@ string GetNameOfResource(DvResourceKind resourceKind)
     {
         default: m_resource_name = "Unknown"; break;
 		case ResourceKind_Dummy: m_resource_name = "Unknown"; break;
-        case ResourceKind_tex: m_resource_name = "Tex"; break;
+        case ResourceKind_Texture: m_resource_name = "Texture"; break;
         case ResourceKind_Character: m_resource_name = "Character"; break;
         case ResourceKind_Model: m_resource_name = "Model"; break;
         case ResourceKind_MotionCamera: m_resource_name = "Camera Motion"; break;

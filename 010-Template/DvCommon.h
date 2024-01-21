@@ -43,7 +43,7 @@ typedef struct
     int32 parameterSize<name = "Parameters Size">;
 	byte padding[8]<name = "Padding", hidden = false>;
 	byte data[parameterSize];
-} ConditionData <optimize=false,name="ConditionData">;
+} ConditionData <optimize=false,name="Condition Data">;
 
 typedef struct
 {
@@ -52,7 +52,7 @@ typedef struct
 	int conditionSize<name = "Condition Size">;
 	byte padding[4]<name = "Padding", hidden = false>;
 	ConditionData conditions[conditionNum];
-} TransitionData <optimize=false,name="TransitionData">;
+} TransitionData <optimize=false,name="Transition Data">;
 
 typedef struct
 {

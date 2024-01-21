@@ -16,18 +16,18 @@
 typedef struct
 {
 	SetRandomBackColor();
-	struct DvSceneHeader 
+	struct dv_scene_header 
 	{
 		uint32 cmnbinptr <name = "Common Pointer", read = GetFixedOffset(this)>;
 		uint32 resbinptr <name = "Resource Pointer", read = GetFixedOffset(this)>;
 		uint32 unkpointers[6] <hidden = true>;
-	} dvscene <name = "DvSceneHeader">;
+	} header <name = "Header">;
 
-    m_relOffset = sizeof(DvSceneHeader);
+    m_relOffset = sizeof(dv_scene_header);
     
-	ReadDvCommon(dvscene.cmnbinptr + m_relOffset);
+	ReadDvCommon(header.cmnbinptr + m_relOffset);
 
-    ReadDvResource(dvscene.resbinptr + m_relOffset);
+    ReadDvResource(header.resbinptr + m_relOffset);
 	
 } ResDvScene <name=Str("%s", FileNameGetBase(GetFileName()))>;
 
