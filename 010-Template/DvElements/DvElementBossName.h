@@ -4,7 +4,7 @@ enum <uint32> boss_name_type
     Dragon,
     Knight,
     Rifle,
-    The_End,
+    TheEnd,
     RifleBeast
 };
 
