@@ -38,9 +38,15 @@ typedef struct {float x,y,z,w;} Vector4<read=Str("%.3f, %.3f, %.3f, %.3f", x,y,z
 
 typedef struct {Vector4 mtx1,mtx2,mtx3,mtx4;} Matrix44;
 
-typedef struct {uint A,B,G,R;} RGBA32;
+typedef struct {uint A,R,G,B;} RGBA32;
+typedef struct {uint R,G,B;} RGB32;
+
+typedef struct {float R,G,B;} RGBF;
 
 typedef struct {char str[0x40];} dvString<read=Str("%s", str)>;
+
+typedef struct {float x, y;} Vector2<read=Str("%f, %f", x, y)>;
+typedef struct {float x, y, z;} Vector3<read=Str("%f, %f, %f", x, y, z)>;
 
 string GetFixedOffset(uint32 offset)
 {

@@ -1,6 +1,6 @@
 typedef struct
 {
-    uint32 field_40[132/4];
+    uint32 field_00;
+    float curveData[32];
     
-    
-}DvElementWeather<optimize=false, read=Str("%s", filename.str), name="DvElementWeather">;
+}DvElementWeather<optimize=false, name="DvElementWeather">;

@@ -1,6 +1,6 @@
 typedef struct
 {
-    float param1;
-    float param2;
+    float alpha;
+    float intensity;
     
 }DvElementDitherParam<optimize=false, name="DvElementDitherParam">;

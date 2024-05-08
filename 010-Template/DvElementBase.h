@@ -108,7 +108,7 @@ void ReadNodeByType(DvNodeType node_type)
 		{
 			struct character_model_node
 			{
-				uint32 field_00;
+				uint32 useMasterLevel;
 				dvString name1;
 				dvString name2;
 				dvString name3;

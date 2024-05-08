@@ -7,4 +7,4 @@ typedef struct
     uint32 Field4C;
     uint32 Field50;
     
-}DvElementVisibilityAnimation<optimize=false, read=Str("%s", filename.str), name="DvElementVisibilityAnimation">;
+}DvElementVertexAnimation<optimize=false, read=Str("%s", filename.str), name="DvElementVertexAnimation">;

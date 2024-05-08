@@ -1,9 +1,7 @@
 typedef struct
 {
 	uint32 field_60;
-	float field_64;
-	uint32 field_68;
-	uint32 field_6c;
+	Vector3 rotation;
 	uint32 field_70;
 	uint32 field_74;
 	uint32 field_78;
