@@ -1,14 +1,16 @@
 typedef struct
 {
+	float focus;
+	float focusRange;
+	float near;
+	float far;
+}DOFNode;
+
+
+typedef struct
+{
 	uint32 field_60;
-	float field_64;
-	float field_68;
-	float field_6c;
-	float far1;
-	float field_74;
-	float field_78;
-	float field_7c;
-	float far2;
+	DOFNode nodes[2];
 	float field_84;
 	float field_88;
 	uint32 field_8c;

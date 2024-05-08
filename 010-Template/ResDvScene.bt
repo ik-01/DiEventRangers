@@ -2,7 +2,7 @@
 //--- 010 Editor v13.0.1 Binary Template
 //
 //  File: ResDvScene.bt
-//  Authors: ik-01
+//  Authors: ik-01, Ashrindy
 //  Version: 
 //  Purpose: Researching DiEvent file format (.dvscene) from Sonic Frontiers
 //  Category: 
@@ -32,9 +32,6 @@ typedef struct
 } ResDvScene <name=Str("%s", FileNameGetBase(GetFileName()))>;
 
 
-if( MessageBox( idYes | idNo, "WARNING!!!", 
-    "This template is WIP. Do you want to continue?") == idYes )
-{
-	SetFileCharSet(CHARSET_JAPANESE);
-	ResDvScene resDvEvent;
-}
+SetFileCharSet(CHARSET_JAPANESE);
+LittleEndian();
+ResDvScene resDvEvent;
