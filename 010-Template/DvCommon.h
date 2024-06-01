@@ -69,13 +69,7 @@ typedef struct
 	uint32 padding[3] <hidden=true>;
 	char name[0x20] <name = "Page Name">;
 	// Need to figure this struct
-	if (skipLinkIndexNum != 0)
-	{
-		uint32 field_50;
-		int32 field_54;
-		int32 field_58;
-		int32 field_5c;
-	}
+	byte randomData[skipLinkIndexNum*4];
 	TransitionData transition[transitionCount];
 	
 } AuthPage <optimize=false, name="AuthPage", read=Str("%s",name), comment="Note: Name string using UTF-8. You need to change text encoding in 'View'">;
